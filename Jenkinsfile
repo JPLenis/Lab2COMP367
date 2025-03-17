@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        // Pull Docker Hub credentials using the ID 'dockerhub-credentials'
         DOCKER_CREDS = credentials('dockerhub-credentials')
     }
 
@@ -29,7 +28,6 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    
                     dockerImage = docker.build("jplenis/lab3:${env.BUILD_NUMBER}")
                 }
             }
@@ -44,7 +42,7 @@ pipeline {
             }
         }
     }
-    
+
     post {
         always {
             echo "Pipeline execution completed."
