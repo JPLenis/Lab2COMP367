@@ -1,13 +1,13 @@
 pipeline {
     agent any
 
-    // Pull the Docker Hub credentials 
+    // Pull the Docker Hub credentials from Jenkins 
     environment {
         DOCKER_CREDS = credentials('dockerhub-credentials')
     }
 
     stages {
-        // Step 1: Checkout the Maven project from GitHub (using branch 'master')
+        // Step 1: Checkout the Maven project from GitHub 
         stage('Checkout') {
             steps {
                 git branch: 'master', url: 'https://github.com/JPLenis/Lab2COMP367.git'
@@ -17,11 +17,11 @@ pipeline {
         // Step 2: Build the Maven project
         stage('Build Maven Project') {
             steps {
-                sh 'mvn clean package'
+                bat 'mvn clean package'
             }
         }
         
-        // Step 3: Docker Login using your Docker Hub credentials
+        // Step 3: Docker Login using Docker Hub credentials
         stage('Docker Login') {
             steps {
                 script {
@@ -32,11 +32,11 @@ pipeline {
             }
         }
         
-        // Step 4: Build the Docker image using the Dockerfile in the repo
+        // Step 4: Build the Docker image using the Dockerfile from the repository
         stage('Docker Build') {
             steps {
                 script {
-                    // Build the image and tag it using the Jenkins build number
+                    // Tag the image with the Jenkins build number for versioning
                     dockerImage = docker.build("jplenis/lab2comp367:${env.BUILD_NUMBER}")
                 }
             }
